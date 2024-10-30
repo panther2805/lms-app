@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: backend-container
-          image: muralialakuntla3/lms-api
+          image: lmsapppacr.azurecr.io/api:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
