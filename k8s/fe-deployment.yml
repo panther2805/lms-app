@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: frontend-container
-          image: muralialakuntla3/lms-web
+          image: lmsapppacr.azurecr.io/webapp:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 80
