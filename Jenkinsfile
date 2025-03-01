@@ -1,6 +1,8 @@
 pipeline {
-    agent any
-    stages {
+   agent any
+
+
+   stages {
        stage('Code Quality') {
            steps {
                echo 'Sonar Analysis Started'
@@ -8,6 +10,7 @@ pipeline {
                echo 'Sonar Analysis Completed'
            }
        }
+      
        stage('Build LMS') {
            steps {
                echo 'LMS Build Started'
@@ -15,6 +18,7 @@ pipeline {
                echo 'LMS Build Completed'
            }
        }
+      
        stage('Publish LMS') {
            steps {
                script {
@@ -22,19 +26,20 @@ pipeline {
                    def packageJSONVersion = packageJson.version
                    echo "${packageJSONVersion}"
                    sh "zip webapp/lms-${packageJSONVersion}.zip -r webapp/dist"
-                   sh "curl -v -u admin:wasim123 --upload-file webapp/lms-${packageJSONVersion}.zip http://52.90.18.22:8081/repository/lms/lms.zip"
+                   sh "curl -v -u admin:12345 --upload-file webapp/lms-${packageJSONVersion}.zip http://18.226.177.88:8081/repository/lms/"
                }
            }
        }
+      
        stage('Deploy LMS') {
            steps {
                script {
                    def packageJson = readJSON file: 'webapp/package.json'
                    def packageJSONVersion = packageJson.version
                    echo "${packageJSONVersion}"
-                   sh "curl -u admin:wasim123 -X GET \'http://18.226.177.88:8081/repository/lms/lms-${packageJSONVersion}.zip\' --output lms'${packageJSONVersion}'.zip"
+                   sh "curl -u admin:wasim123 -X GET \'http://18.226.177.88:8081/repository/lms/lms-${packageJSONVersion}.zip\' --output lms-'${packageJSONVersion}'.zip"
                    sh 'sudo rm -rf /var/www/html/*'
-                   sh "sudo unzip -o lms'${packageJSONVersion}'.zip"
+                   sh "sudo unzip -o lms-'${packageJSONVersion}'.zip"
                    sh "sudo cp -r webapp/dist/* /var/www/html"
                }
            }
