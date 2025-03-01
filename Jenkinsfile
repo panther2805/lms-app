@@ -75,7 +75,7 @@ pipeline {
 
                     sh '''
                     sudo rm -rf /var/www/html/*
-                    sudo unzip -o lms-${packageJSONVersion}.zip -d sudo cp -r webapp/dist/* /var/www/html
+                    sudo unzip -o lms-${packageJSONVersion}.zip -d sudo cp -r webapp/dist/* /var/www/html/
                     '''
                 }
             }
