@@ -4,7 +4,7 @@ pipeline {
        stage('Code Quality') {
            steps {
                echo 'Sonar Analysis Started'
-               sh 'cd webapp && sudo docker run --rm -e SONAR_HOST_URL="http://52.90.18.22:9000" -v ".:/usr/src" -e SONAR_TOKEN="sqp_49000396dbf165e46bea15fe3f84668bdc709fc9" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
+               sh 'cd webapp && sudo docker run --rm -e SONAR_HOST_URL="http://18.226.177.88:9000" -v ".:/usr/src" -e SONAR_TOKEN="sqp_08a319a7a7bb32b7826c258d6c42d84c4ba936ea" sonarsource/sonar-scanner-cli -Dsonar.projectKey=lms'
                echo 'Sonar Analysis Completed'
            }
        }
@@ -22,7 +22,7 @@ pipeline {
                    def packageJSONVersion = packageJson.version
                    echo "${packageJSONVersion}"
                    sh "zip webapp/lms-${packageJSONVersion}.zip -r webapp/dist"
-                   sh "curl -v -u admin:wasim123 --upload-file webapp/lms-${packageJSONVersion}.zip http://52.90.18.22:8081/repository/lms/lms.zip"
+                   sh "curl -v -u admin:wasim123 --upload-file webapp/lms${packageJSONVersion}.zip http://52.90.18.22:8081/repository/lms/lms.zip"
                }
            }
        }
@@ -32,7 +32,7 @@ pipeline {
                    def packageJson = readJSON file: 'webapp/package.json'
                    def packageJSONVersion = packageJson.version
                    echo "${packageJSONVersion}"
-                   sh "curl -u admin:wasim123 -X GET \'http://52.90.18.22:8081/repository/lms/lms${packageJSONVersion}.zip\' --output lms-'${packageJSONVersion}'.zip"
+                   sh "curl -u admin:wasim123 -X GET \'http://18.226.177.88:8081/repository/lms/lms${packageJSONVersion}.zip\' --output lms'${packageJSONVersion}'.zip"
                    sh 'sudo rm -rf /var/www/html/*'
                    sh "sudo unzip -o lms'${packageJSONVersion}'.zip"
                    sh "sudo cp -r webapp/dist/* /var/www/html"
