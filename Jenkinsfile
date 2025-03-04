@@ -28,12 +28,17 @@ pipeline {
                     echo "LMS Version: ${packageJSONVersion}"
 
                     sh '''
-                        docker build -t lms-frontend:${packageJSONVersion} .
-                        docker tag lms-frontend:${packageJSONVersion} lms-frontend:latest
-                        docker login -u panther6 -p Shubhu@2846
-                        docker push lms-frontend:${packageJSONVersion}
-                        docker push lms-frontend:latest
+                        docker build -t panther6/lms-frontend:${packageJSONVersion} .
+                        docker tag panther6/lms-frontend:${packageJSONVersion} panther6/lms-frontend:latest
                     '''
+
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh '''
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker push panther6/lms-frontend:${packageJSONVersion}
+                            docker push panther6/lms-frontend:latest
+                        '''
+                    }
                 }
             }
         }
@@ -49,7 +54,7 @@ pipeline {
                         docker pull panther6/lms-frontend:${packageJSONVersion}
                         docker stop lms-frontend || true
                         docker rm lms-frontend || true
-                        docker run -d -p 80:3000 --name lms-frontend lms-frontend:${packageJSONVersion}
+                        docker run -d -p 80:3000 --name lms-frontend panther6/lms-frontend:${packageJSONVersion}
                     '''
                 }
             }
