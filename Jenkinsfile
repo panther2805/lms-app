@@ -28,11 +28,11 @@ pipeline {
                     echo "LMS Version: ${packageJSONVersion}"
 
                     sh '''
-                        docker build -t panther6/lms-frontend:${packageJSONVersion} .
-                        docker tag panther6/lms-frontend:${packageJSONVersion} panther6/lms-frontend:latest
+                        docker build -t lms-frontend:${packageJSONVersion} .
+                        docker tag lms-frontend:${packageJSONVersion} lms-frontend:latest
                         docker login -u panther6 -p Shubhu@2846
-                        docker push panther6/lms-frontend:${packageJSONVersion}
-                        docker push panther6/lms-frontend:latest
+                        docker push lms-frontend:${packageJSONVersion}
+                        docker push lms-frontend:latest
                     '''
                 }
             }
@@ -49,7 +49,7 @@ pipeline {
                         docker pull panther6/lms-frontend:${packageJSONVersion}
                         docker stop lms-frontend || true
                         docker rm lms-frontend || true
-                        docker run -d -p 80:3000 --name lms-frontend panther6/lms-frontend:${packageJSONVersion}
+                        docker run -d -p 80:3000 --name lms-frontend lms-frontend:${packageJSONVersion}
                     '''
                 }
             }
